@@ -1,4 +1,5 @@
 #include "FastLED.h"
+#include "Wire.hh"
 #include <SDL2/SDL.h>
 #include <cstdio>
 #include <assert.h>
@@ -12,6 +13,7 @@ void delay(int milliseconds) {
 }
 
 FakeLED FastLED;
+FakeWire Wire;
 
 namespace {
 SDL_Window* window;
@@ -108,6 +110,22 @@ void registerDisplay(const Display& display) {
                   display.shapes.end());
 }
 
+char FakeWire::read() {
+    if (_it == _buffer.end()) {
+        return 0;
+    }
+    return *(_it++);
+}
+
+void FakeWire::_addString(const char* str) {
+    _buffer.erase(_buffer.begin(), _it);
+    _buffer += str;
+    _it = _buffer.begin();
+    if (_callback) {
+        _callback(_buffer.size());
+    }
+}
+
 int main() {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::fprintf(stderr, "Error initializing SDL: %s\n",
@@ -141,6 +159,8 @@ int main() {
                     goto exit;
                 } else if (event.key.keysym.sym == SDLK_SPACE) {
                     paused = !paused;
+                } else {
+                    Wire._addString(SDL_GetKeyName(event.key.keysym.sym));
                 }
             }
         }
