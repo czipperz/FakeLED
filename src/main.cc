@@ -4,10 +4,6 @@
 #include <cstdio>
 #include <assert.h>
 
-// user defined functions
-void setup();
-void loop();
-
 void delay(int milliseconds) {
     SDL_Delay(milliseconds);
 }
