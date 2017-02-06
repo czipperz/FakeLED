@@ -91,10 +91,10 @@ Shape Shape::rectangle(Point top_left, int width, int height) {
 }
 
 void Display::addShape(const Port& port, const Shape& shape) {
-    ports.reserve(ports.size() + 1);
-    shapes.reserve(shapes.size() + 1);
-    ports.push_back(port);
-    shapes.push_back(shape);
+    this->ports.reserve(ports.size() + 1);
+    this->shapes.reserve(shapes.size() + 1);
+    this->ports.push_back(port);
+    this->shapes.push_back(shape);
 }
 
 void registerDisplay(const Display& display) {
